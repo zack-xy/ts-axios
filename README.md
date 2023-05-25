@@ -4,6 +4,8 @@ axios的TypeScript实现
 
 [项目模板](https://github.com/alexjoverm/typescript-library-starter)
 
+node版本：v14.21.3
+
 ###### 项目模板的工具集成
 
 + RollupJS打包
