@@ -1,4 +1,4 @@
-import axios from '../../src/index';
+import axios, { AxiosError } from '../../src/index';
 
 
 axios({
@@ -48,6 +48,11 @@ axios({
   timeout: 2000
 }).then(res => {
   console.log('2秒后超时请求成功', res);
-}).catch(err => {
+}).catch((err:AxiosError) => {
+  console.log(err.message )
+  console.log(err.code )
+  console.log(err.config )
+  console.log(err.request )
   console.log('2秒后超时请求失败', err);
 })
+ 
