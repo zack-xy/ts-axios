@@ -1,4 +1,5 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types/index';
+import { parseHeaders } from './helpers/headers';
 
 // 请求的实际实现
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
@@ -19,13 +20,13 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         return
       }
 
-      const responseHeaders = request.getAllResponseHeaders()
+      const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const resoponseData = responseType !== 'text' ? request.response : request.responseText
       const response: AxiosResponse = {
         data: resoponseData,
         status: request.status,
         statusText: request.statusText,
-        headers: responseHeaders,
+        headers: responseHeaders, 
         config,
         request
       }
