@@ -130,3 +130,31 @@ axios({
 
 ////// 测试设置header -- end
 
+
+////// 测试返回Promise -- start
+
+axios({
+  method: 'post',
+  url: '/base/post',
+  data: {
+    a: 1,
+    b: 2
+  }
+}).then(res => {
+  console.log('请求的返回->', res);
+})
+
+axios({
+  method: 'post',
+  url: '/base/post',
+  responseType: 'json',
+  data: {
+    a: 3,
+    b: 4
+  }
+}).then(res => {
+  console.log('responseType为json请求的返回->', res);
+})
+
+////// 测试返回Promise -- end
+
