@@ -60,6 +60,32 @@ router.post('/base/buffer', function(req, res) {
 // 测试post请求参数 -- end
 
 
+// 测试error情况 -- start
+
+router.get('/error/get', function(req, res) {
+  if(Math.random() > 0.5) {
+    res.json({
+      msg: 'everything is fine'
+    })
+  } else {
+    res.status(500)
+    res.end()
+  }
+})
+
+router.get('/error/timeout', function(req, res) {
+  setTimeout(() => {
+    res.json({
+      msg: 'everything is fine'
+    })
+  }, 3000);
+})
+
+
+// 测试error情况 -- stop
+
+
+
 app.use(router)
 
 const port = process.env.PORT || 8080

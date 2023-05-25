@@ -14,7 +14,8 @@
    data?: any
    params?: any
    headers?: any
-   responseType?: XMLHttpRequestResponseType
+   responseType?: XMLHttpRequestResponseType,
+   timeout?: number
  }
 
  export interface AxiosResponse {
