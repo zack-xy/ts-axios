@@ -9,7 +9,7 @@
 
  // axios传入配置项
  export interface AxiosRequestConfig {
-   url: string
+   url?: string
    method?: Method
    data?: any
    params?: any
@@ -37,4 +37,23 @@
   code?: string | null
   request?: any
   response?: AxiosResponse
+ }
+
+
+ // 扩展接口
+ export interface Axios {
+   request(config: AxiosRequestConfig): AxiosPromise
+   get(url: string, config?: AxiosRequestConfig): AxiosPromise
+   delete(url: string, config?: AxiosRequestConfig): AxiosPromise
+   head(url: string, config?: AxiosRequestConfig): AxiosPromise
+   options(url: string, config?: AxiosRequestConfig): AxiosPromise
+   post(url: string,data?:any, config?: AxiosRequestConfig): AxiosPromise
+   put(url: string,data?:any, config?: AxiosRequestConfig): AxiosPromise
+   patch (url: string,data?:any, config?: AxiosRequestConfig): AxiosPromise
+ }
+
+ // 混合接口，既本身是一个方法
+ // 也有扩展接口  
+ export interface AxiosInstance extends Axios {
+  (config: AxiosRequestConfig): AxiosPromise 
  }
