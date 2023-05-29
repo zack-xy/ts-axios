@@ -56,4 +56,5 @@
  // 也有扩展接口  
  export interface AxiosInstance extends Axios {
   (config: AxiosRequestConfig): AxiosPromise 
+  (url: string, config?: AxiosRequestConfig): AxiosPromise
  }

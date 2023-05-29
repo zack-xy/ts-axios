@@ -3,9 +3,22 @@ import dispatchRequest from './dispatchRequest';
 
 // Axios类，实例有request方法和get、delete等一系列方法
 export default class Axios { 
-   request(config: AxiosRequestConfig): AxiosPromise {
+  
+   // request重载，支持不同方式的调用
+   request(url: any, config?: any): AxiosPromise {
+    if(typeof url === 'string') {
+      if(!config) {
+        config = {}
+      }
+      config.url = url
+    } else {
+      config = url
+    }
     return dispatchRequest(config)
    }
+  //  request(config: AxiosRequestConfig): AxiosPromise {
+  //   return dispatchRequest(config)
+  //  }
 
    get(url: string, config?:AxiosRequestConfig): AxiosPromise{
     return this._requestMethodWithoutData('get', url, config)   
