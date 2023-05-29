@@ -124,4 +124,16 @@ function registerExtendRouter() {
   router.patch('/extend/patch', function(req, res) {
     res.json(req.body)
   })
+
+  // 在请求的时候增加返回返回类型
+  router.get('/extend/user',  function(req, res) {
+    res.json({
+      code: 0,
+      message: 'ok',
+      result: {
+        name: 'jack',
+        age: 18
+      }
+    })
+  })
 }
