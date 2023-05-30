@@ -52,3 +52,9 @@ instance.get('/other/get', {
 }).then(res => {
   console.log(res);
 }) 
+
+const instance2 = axios.create({
+  baseURL: 'https://pic1.zhimg.com/50/'
+})
+
+instance2.get('v2-257bb81683aa16bd75acd636434fb6f3_r.jpg')
