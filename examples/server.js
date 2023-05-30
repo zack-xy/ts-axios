@@ -217,4 +217,8 @@ function registerOtherRouter() {
     res.status(304)
     res.end()
   })
+
+  router.get('/other/get', function(req, res) {
+    res.end('hello')
+  })
 }

@@ -27,6 +27,10 @@ const toString =  Object.prototype.toString
    return to as T & U
  }
 
+ export function isURLSearchParams(val: any): val is URLSearchParams {
+  return typeof val !== 'undefined' && val instanceof URLSearchParams
+ }
+
 
  // 简单递归深拷贝
  export function deepMerge(...objs: any[]): any {
