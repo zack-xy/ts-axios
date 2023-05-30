@@ -3,7 +3,7 @@ const toString =  Object.prototype.toString
  
   // 判断是一个日期
  export function isDate(val: any): val is Date {
-  return  toString.call(val) === '[object Date ]'
+  return  toString.call(val) === '[object Date]'
  }
 
  // 判断是一个对象
