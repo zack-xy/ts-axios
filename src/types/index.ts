@@ -16,6 +16,8 @@
    headers?: any
    responseType?: XMLHttpRequestResponseType,
    timeout?: number
+
+   [propName: string]: any
  }
 
  export interface AxiosResponse<T = any> {
@@ -42,6 +44,8 @@
 
  // 扩展接口
  export interface Axios {
+
+   defaults: AxiosRequestConfig
 
    interceptors: {
       request: AxiosInterceptorManager<AxiosRequestConfig>
