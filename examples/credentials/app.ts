@@ -23,3 +23,15 @@ const instance = axios.create({
 instance.get('/more/get').then(res => {
   console.log(res);
 })
+
+
+axios.post('/more/post', {
+  a: 1
+}, {
+  auth: {
+    username: 'Zack Zheng',
+    password: '123456'
+  }
+}).then(res => {
+  console.log(res);
+})

@@ -1,0 +1,2 @@
+配置auth属性，包含username和password属性
+自动往HTTP的请求header中添加Authorization属性，为加密串
