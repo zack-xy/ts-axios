@@ -50,6 +50,7 @@ registerCancelRouter()
 registerMoreRouter()
 registerUploadRouter()
 registerOtherRouter()
+registerFinalRouter()
 
 
 app.use(router)
@@ -222,3 +223,14 @@ function registerOtherRouter() {
     res.end('hello')
   })
 }
+
+function registerFinalRouter() {
+  router.get('/final/A', function(req, res) {
+    res.end('A')
+  })
+
+  router.get('/final/B', function(req, res) {
+    res.end('B')
+  })
+}
+
