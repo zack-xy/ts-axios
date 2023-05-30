@@ -1,4 +1,4 @@
- export type Method = 'get' | 'GET' 
+  export type Method = 'get' | 'GET' 
  | 'delete' | 'DELETE '
  | 'head' | 'HEAD'
  |  'options' | 'OPTIONS'
@@ -91,3 +91,7 @@
  export interface AxiosTransformer {
    (data: any, headers?: any): any
  }
+
+ export interface AxiosStatic extends AxiosInstance{
+     create(config?: AxiosRequestConfig): AxiosInstance 
+ } 
