@@ -3,6 +3,7 @@ import { parseHeaders } from '../helpers/headers';
 import { createError } from '../helpers/error';
 import { isURLSameOrigin } from '../helpers/url';
 import cookie from '../helpers/cookie';
+import { isFormData } from '../helpers/util';
 
 // 请求的实际实现
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
@@ -18,83 +19,111 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       cancelToken, 
       withCredentials,
       xsrfCookieName,
-      xsrfHeaderName
+      xsrfHeaderName,
+      onDownloadProgress,
+      onUploadProgress
     } = config
 
     const request = new XMLHttpRequest()
 
-    if(responseType) {
-      request.responseType = responseType
-    }
-
-    if(timeout) {
-      request.timeout = timeout
-    }
-
-    if(withCredentials) {
-      request.withCredentials = withCredentials
-    }
-  
     request.open(method.toUpperCase(), url!, true) 
+    
+    configureRequest()
+    addEvents()
+    processHeaders()
+    processCancel()
 
-    request.onreadystatechange = function handleLoad() {
-      if(request.readyState !== 4) {
-        return
+    request.send(data)
+
+    function configureRequest(): void  {
+      if(responseType) {
+        request.responseType = responseType
       }
-
-      if(request.status === 0) {
-        return
+  
+      if(timeout) {
+        request.timeout = timeout
       }
-
-      const responseHeaders = parseHeaders(request.getAllResponseHeaders())
-      const resoponseData = responseType !== 'text' ? request.response : request.responseText
-      const response: AxiosResponse = {
-        data: resoponseData,
-        status: request.status,
-        statusText: request.statusText,
-        headers: responseHeaders, 
-        config,
-        request
-      }
-      handleResponse(response)
-    }
-
-    // 网络错误
-    request.onerror = function handleError() {
-      reject(createError('Network Error',config, null, request)) 
-    }
-
-    // 超时事件
-    request.ontimeout = function handleTimeout() {
-      reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
-    }
-
-    // 设置xsrfHeaderName
-    if((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
-      const xsrfValue = cookie.read(xsrfCookieName)
-      if(xsrfValue && xsrfHeaderName) {
-        headers[xsrfHeaderName] = xsrfValue
+  
+      if(withCredentials) {
+        request.withCredentials = withCredentials
       }
     }
 
-    // 设置请求头
-    Object.keys(headers).forEach(name => { // 如果数据为空，不必要设置content-type
-      if(data === null && name.toLowerCase() === 'content-type') {
-        delete headers[name]
-      } else {
-        request.setRequestHeader(name, headers[name])
-      }
-    })
-   
+    function addEvents(): void {
 
-    if(cancelToken) {
-      cancelToken.promise.then(reason => {
-        request.abort()
-        reject(reason)
+      request.onreadystatechange = function handleLoad() {
+        if(request.readyState !== 4) {
+          return
+        }
+  
+        if(request.status === 0) {
+          return
+        }
+  
+        const responseHeaders = parseHeaders(request.getAllResponseHeaders())
+        const resoponseData = responseType !== 'text' ? request.response : request.responseText
+        const response: AxiosResponse = {
+          data: resoponseData,
+          status: request.status,
+          statusText: request.statusText,
+          headers: responseHeaders, 
+          config,
+          request
+        }
+        handleResponse(response)
+      }
+
+       // 网络错误
+      request.onerror = function handleError() {
+        reject(createError('Network Error',config, null, request)) 
+      }
+
+      // 超时事件
+      request.ontimeout = function handleTimeout() {
+        reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
+      }
+
+      if(onDownloadProgress) {
+        request.onprogress = onDownloadProgress 
+      }
+
+      if(onUploadProgress) {
+        request.upload.onprogress = onUploadProgress
+      }
+    }
+
+    function processHeaders(): void  {
+      // 上传时如果是formData，让浏览器自动设置headers 
+      if(isFormData(data)) {
+        delete headers['Content-Type']
+      }
+
+      // 设置xsrfHeaderName
+      if((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+        const xsrfValue = cookie.read(xsrfCookieName)
+        if(xsrfValue && xsrfHeaderName) {
+          headers[xsrfHeaderName] = xsrfValue
+        }
+      }
+
+      // 设置请求头
+      Object.keys(headers).forEach(name => { // 如果数据为空，不必要设置content-type
+        if(data === null && name.toLowerCase() === 'content-type') {
+          delete headers[name]
+        } else {
+          request.setRequestHeader(name, headers[name])
+        }
       })
     }
 
-    request.send(data)
+    function processCancel(): void {
+      if(cancelToken) {
+        cancelToken.promise.then(reason => {
+          request.abort()
+          reject(reason)
+        })
+      }
+    }
 
     function handleResponse(response: AxiosResponse): void {
       if(response.status >= 200 && response.status < 300) {

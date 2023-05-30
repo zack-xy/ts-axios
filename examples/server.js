@@ -2,9 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const webpack = require('webpack')
 const cookieParser = require('cookie-parser')
+const multipart = require('connect-multiparty')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const webpackConfig = require('./webpack.config')
+const path = require('path')
 
 require('./server2')
 
@@ -31,6 +33,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
 
+// 文件上传
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload')
+}))
+
 const router = express.Router()
 
 registerSimpleRouter()
@@ -41,6 +48,7 @@ registerInterceptorRouter()
 registerConfigRouter()
 registerCancelRouter()
 registerMoreRouter()
+registerUploadRouter()
 
 
 app.use(router)
@@ -181,4 +189,11 @@ function registerMoreRouter() {
   router.get('/more/get', function(req, res) {
     res.json(req.cookies)
   })
+}
+
+function registerUploadRouter() {
+  router.post('/upload/file', function(req, res){
+    console.log(req.body, req.files);
+    res.end('upload success!')
+  }) 
 }
