@@ -1,5 +1,10 @@
 import { isDate, isPlainObject } from "./util"
 
+interface URLOrigin {
+  protocol: string
+  host: string
+}
+
 function encode(val: string): string { // 特殊字符处理
   return encodeURIComponent(val)
     .replace(/%40/g, '@')
@@ -51,4 +56,23 @@ export function buildURL(url: string, params?:any): string {
   return url
  
 }
- 
+
+const urlParsingNode = document.createElement('a')
+const currentOrigin = resolveURL(window.location.href)
+
+// 判断一个url跟当前的url是否在一个域
+export function isURLSameOrigin(requestURL: string): boolean {
+  const parsedOrigin = resolveURL(requestURL)
+  return parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host ===  currentOrigin.host
+} 
+
+// 解析一个链接的【协议】和【端口】
+function resolveURL(url: string): URLOrigin {
+  urlParsingNode.setAttribute('href', url)
+  const { protocol, host } = urlParsingNode
+  return {
+    protocol,
+    host
+  }
+}
+   
