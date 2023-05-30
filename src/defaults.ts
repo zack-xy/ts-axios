@@ -27,7 +27,11 @@ import { transformRequest, transformResponse } from './helpers/data';
     function(data: any): any {
        return transformResponse(data)
     }
-   ]
+   ],
+
+   validateStatus(status: number): boolean {
+      return status >= 200 && status <= 300
+   }
 
  } 
 

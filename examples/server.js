@@ -49,6 +49,7 @@ registerConfigRouter()
 registerCancelRouter()
 registerMoreRouter()
 registerUploadRouter()
+registerOtherRouter()
 
 
 app.use(router)
@@ -209,4 +210,11 @@ function registerUploadRouter() {
     console.log(req.body, req.files);
     res.end('upload success!')
   }) 
+}
+
+function registerOtherRouter() {
+  router.get('/other/304', function(req, res) {
+    res.status(304)
+    res.end()
+  })
 }
