@@ -36,16 +36,16 @@ export  function transformURL(config: AxiosRequestConfig): string {
     return buildURL(url!, params, paramsSerializer)
 }
  
-// 转换config中的data
-function transformRequestData(config: AxiosRequestConfig): any {
-    return transformRequest(config.data)
-}
+// // 转换config中的data
+// function transformRequestData(config: AxiosRequestConfig): any {
+//     return transformRequest(config.data)
+// }
 
-// 转换请求头
-function transformHeaders(config: AxiosRequestConfig): any {
-    const { headers={}, data } = config
-    return processHeaders(headers, data)
-}
+// // 转换请求头
+// function transformHeaders(config: AxiosRequestConfig): any {
+//     const { headers={}, data } = config
+//     return processHeaders(headers, data)
+// }
 
 // 处理响应的data为对象
 function transformResponseData(res: AxiosResponse): AxiosResponse   {

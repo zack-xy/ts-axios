@@ -21,8 +21,8 @@ function deepMergeStrat(value1: any, value2: any): any {
     return value2
   } else if(isPlainObject(value1)) {
     return deepMerge(value1)
-  } else if(typeof value2 !== 'undefined') {
-    return value1 
+  } else {
+    return value1  
   }
 }
 
