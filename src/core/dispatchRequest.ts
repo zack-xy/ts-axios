@@ -10,6 +10,11 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
     processConfig(config)
     return xhr(config).then((res: AxiosResponse) => {
         return transformResponseData(res)
+    }, e => {
+        if(e && e.response) {
+            e.response = transformResponseData(e.response)
+        }
+        return Promise.reject(e)
     })
 }
 
@@ -23,7 +28,7 @@ function processConfig(config: AxiosRequestConfig): void {
 }
 
 // 转换config中的url
-export function transformURL(config: AxiosRequestConfig): string {
+export  function transformURL(config: AxiosRequestConfig): string {
     let {url, params, paramsSerializer, baseURL} = config
     if(baseURL && !isAbsoluteURL(url!)) {
         url = combineURL(baseURL, url)
